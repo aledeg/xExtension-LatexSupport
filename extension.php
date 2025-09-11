@@ -7,17 +7,21 @@ class LatexSupportExtension extends Minz_Extension {
         'default-src' => 'https://cdn.jsdelivr.net',
     ];
 
-    public function init() {
+    public function init(): void {
         $this->loadMathjax();
-        $this->registerHook('entry_before_display', array($this, 'sanitize'));
+        $this->registerHook('entry_before_display', [$this, 'sanitize']);
     }
 
-    private function loadMathjax() {
+    private function loadMathjax(): void {
         $config = 'mathjax-config.js';
         Minz_View::appendScript($this->getFileUrl($config, 'js'));
         Minz_View::appendScript(self::MATHJAX_URL);
     }
 
+    /**
+     * @param \FreshRSS_Entry $entry
+     * @return \FreshRSS_Entry
+     */
     public function sanitize($entry) {
         $content = str_replace([
             '\\left⌊',
